@@ -1,0 +1,239 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #0f172a;
+  background: #f8fafc;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  background: #f8fafc;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, rgba(240, 249, 255, 0.95) 48%, rgba(238, 242, 255, 0.95) 100%);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+select {
+  color-scheme: light;
+}
+
+select option {
+  background: #ffffff;
+  color: #0f172a;
+}
+
+::selection {
+  background: rgba(56, 189, 248, 0.3);
+  color: white;
+}
+
+@layer components {
+  .glass-panel {
+    @apply border border-white/60 bg-white/85 backdrop-blur-xl shadow-xl shadow-slate-200/50;
+  }
+
+  .glass-hover {
+    @apply transition duration-300 hover:-translate-y-0.5 hover:border-indigo-300 hover:shadow-lg hover:shadow-indigo-200/60;
+  }
+}
+
+@layer utilities {
+  .bg-slate-950 { background-color: #f8fafc !important; }
+  .bg-slate-950\/80 { background-color: rgba(255, 255, 255, 0.82) !important; }
+  .bg-slate-950\/70 { background-color: rgba(255, 255, 255, 0.78) !important; }
+  .bg-slate-950\/65 { background-color: rgba(255, 255, 255, 0.8) !important; }
+  .bg-slate-950\/60 { background-color: rgba(255, 255, 255, 0.72) !important; }
+  .bg-slate-950\/50 { background-color: rgba(255, 255, 255, 0.62) !important; }
+  .bg-slate-900\/90 { background-color: rgba(255, 255, 255, 0.92) !important; }
+  .bg-slate-900\/80 { background-color: rgba(255, 255, 255, 0.88) !important; }
+  .bg-slate-900\/70 { background-color: rgba(255, 255, 255, 0.82) !important; }
+  .bg-slate-900\/60 { background-color: rgba(255, 255, 255, 0.85) !important; }
+  .bg-slate-900\/50 { background-color: rgba(248, 250, 252, 0.82) !important; }
+  .bg-slate-900\/40 { background-color: rgba(248, 250, 252, 0.72) !important; }
+  .bg-slate-950\/30 { background-color: rgba(255, 255, 255, 0.5) !important; }
+  .bg-slate-950\/55 { background-color: rgba(255, 255, 255, 0.68) !important; }
+  .bg-slate-900 { background-color: #ffffff !important; }
+  .bg-slate-900\/85 { background-color: rgba(255, 255, 255, 0.9) !important; }
+  .bg-slate-900\/65 { background-color: rgba(255, 255, 255, 0.8) !important; }
+  .bg-slate-900\/55 { background-color: rgba(255, 255, 255, 0.72) !important; }
+  .text-white { color: #0f172a !important; }
+  .text-slate-100 { color: #1e293b !important; }
+  .text-slate-200 { color: #334155 !important; }
+  .text-slate-300 { color: #475569 !important; }
+  .text-slate-400 { color: #64748b !important; }
+  .text-slate-500 { color: #64748b !important; }
+  .text-sky-300 { color: #0369a1 !important; }
+  .text-cyan-300 { color: #0e7490 !important; }
+  .text-indigo-300 { color: #4338ca !important; }
+  .text-violet-300 { color: #6d28d9 !important; }
+  .text-emerald-300 { color: #047857 !important; }
+  .text-amber-300 { color: #b45309 !important; }
+  .text-rose-300 { color: #be123c !important; }
+  .border-slate-800, .border-slate-800\/80 { border-color: rgba(203, 213, 225, 0.7) !important; }
+  .border-slate-700 { border-color: rgba(203, 213, 225, 0.85) !important; }
+  .border-white\/10 { border-color: rgba(255, 255, 255, 0.7) !important; }
+  .border-white\/\[0\.08\] { border-color: rgba(203, 213, 225, 0.7) !important; }
+  .border-white\/\[0\.06\] { border-color: rgba(226, 232, 240, 0.8) !important; }
+}
+
+html.theme-dark,
+html.theme-dark body {
+  background: #020617;
+  color: #e2e8f0;
+}
+
+html.theme-dark select {
+  color-scheme: dark;
+}
+
+html.theme-dark select option,
+.login-theme select option {
+  background: #0f172a;
+  color: #f1f5f9;
+}
+
+html.theme-dark select option:hover,
+html.theme-dark select option:checked {
+  background: #164e63;
+  color: #cffafe;
+}
+
+html.theme-dark input,
+html.theme-dark select,
+html.theme-dark textarea {
+  background-color: #0f172a !important;
+  border-color: #334155 !important;
+  color: #f1f5f9 !important;
+  caret-color: #67e8f9;
+}
+
+html.theme-dark input::placeholder,
+html.theme-dark textarea::placeholder {
+  color: #64748b !important;
+}
+
+html.theme-dark input:focus,
+html.theme-dark select:focus,
+html.theme-dark textarea:focus {
+  border-color: #06b6d4 !important;
+  box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2) !important;
+  outline: none;
+}
+
+html.theme-dark .theme-app-canvas {
+  background: linear-gradient(135deg, #020617 0%, #0f172a 52%, #111827 100%) !important;
+  color: #f8fafc !important;
+}
+
+html.theme-dark .glass-panel {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  background-color: rgba(15, 23, 42, 0.62) !important;
+  box-shadow: 0 20px 45px rgba(2, 6, 23, 0.28) !important;
+}
+
+html.theme-dark .bg-slate-950 { background-color: #020617 !important; }
+html.theme-dark .bg-slate-950\/80 { background-color: rgba(2, 6, 23, 0.8) !important; }
+html.theme-dark .bg-slate-950\/70 { background-color: rgba(2, 6, 23, 0.72) !important; }
+html.theme-dark .bg-slate-950\/65 { background-color: rgba(2, 6, 23, 0.65) !important; }
+html.theme-dark .bg-slate-950\/60 { background-color: rgba(2, 6, 23, 0.6) !important; }
+html.theme-dark .bg-slate-950\/50 { background-color: rgba(2, 6, 23, 0.5) !important; }
+html.theme-dark .bg-slate-950\/30 { background-color: rgba(2, 6, 23, 0.3) !important; }
+html.theme-dark .bg-slate-900 { background-color: #0f172a !important; }
+html.theme-dark .bg-slate-900\/90 { background-color: rgba(15, 23, 42, 0.9) !important; }
+html.theme-dark .bg-slate-900\/85 { background-color: rgba(15, 23, 42, 0.85) !important; }
+html.theme-dark .bg-slate-900\/80 { background-color: rgba(15, 23, 42, 0.8) !important; }
+html.theme-dark .bg-slate-900\/70 { background-color: rgba(15, 23, 42, 0.7) !important; }
+html.theme-dark .bg-slate-900\/65 { background-color: rgba(15, 23, 42, 0.65) !important; }
+html.theme-dark .bg-slate-900\/60 { background-color: rgba(15, 23, 42, 0.6) !important; }
+html.theme-dark .bg-slate-900\/55 { background-color: rgba(15, 23, 42, 0.55) !important; }
+html.theme-dark .bg-slate-900\/50 { background-color: rgba(15, 23, 42, 0.5) !important; }
+html.theme-dark .bg-slate-900\/40 { background-color: rgba(15, 23, 42, 0.4) !important; }
+html.theme-dark .text-white { color: #f8fafc !important; }
+html.theme-dark .text-slate-100 { color: #f1f5f9 !important; }
+html.theme-dark .text-slate-200 { color: #e2e8f0 !important; }
+html.theme-dark .text-slate-300 { color: #cbd5e1 !important; }
+html.theme-dark .text-slate-400 { color: #94a3b8 !important; }
+html.theme-dark .text-slate-500 { color: #94a3b8 !important; }
+html.theme-dark .border-slate-800,
+html.theme-dark .border-slate-800\/80 { border-color: rgba(51, 65, 85, 0.8) !important; }
+html.theme-dark .border-slate-700 { border-color: rgba(71, 85, 105, 0.9) !important; }
+html.theme-dark .border-white\/10,
+html.theme-dark .border-white\/\[0\.08\] { border-color: rgba(255, 255, 255, 0.1) !important; }
+html.theme-dark .theme-toggle { border-color: rgba(255, 255, 255, 0.1) !important; background: rgba(255, 255, 255, 0.05) !important; color: #cbd5e1 !important; }
+html.theme-dark .bg-white\/80,
+html.theme-dark .bg-white\/75,
+html.theme-dark .bg-white\/70 { background-color: rgba(15, 23, 42, 0.78) !important; }
+html.theme-dark .border-slate-200,
+html.theme-dark .border-slate-200\/80 { border-color: rgba(255, 255, 255, 0.1) !important; }
+html.theme-dark .text-slate-600,
+html.theme-dark .text-slate-700 { color: #cbd5e1 !important; }
+html.theme-dark label { color: #cbd5e1 !important; }
+html.theme-dark th { color: #e2e8f0 !important; }
+html.theme-dark .text-amber-700 { color: #fcd34d !important; }
+html.theme-dark .text-rose-700 { color: #fda4af !important; }
+html.theme-dark .text-emerald-700 { color: #6ee7b7 !important; }
+html.theme-dark .text-cyan-600 { color: #67e8f9 !important; }
+html.theme-dark .text-indigo-600 { color: #a5b4fc !important; }
+html.theme-dark .text-emerald-600 { color: #6ee7b7 !important; }
+html.theme-dark .text-rose-600 { color: #fda4af !important; }
+
+html.theme-dark .assignments-page .glass-panel {
+  border-color: rgba(71, 85, 105, 0.8) !important;
+  background: rgba(15, 23, 42, 0.9) !important;
+  color: #f1f5f9 !important;
+}
+
+html.theme-dark .assignments-page .text-slate-900,
+html.theme-dark .assignments-page .text-slate-900\/90 { color: #f8fafc !important; }
+html.theme-dark .assignments-page .text-slate-500 { color: #cbd5e1 !important; }
+html.theme-dark .assignments-page .bg-white,
+html.theme-dark .assignments-page .bg-white\/95 { background: #0f172a !important; }
+html.theme-dark .assignments-page .bg-slate-50 { background: rgba(2, 6, 23, 0.8) !important; }
+html.theme-dark .assignments-page .bg-slate-200 { background: #1e293b !important; }
+html.theme-dark .assignments-page table thead { background: rgba(2, 6, 23, 0.8) !important; color: #e2e8f0 !important; }
+html.theme-dark .assignments-page table tbody tr { border-color: #1e293b !important; background: rgba(15, 23, 42, 0.4) !important; }
+html.theme-dark .assignments-page table tbody tr:hover { background: rgba(30, 41, 59, 0.6) !important; }
+html.theme-dark .assignments-page input,
+html.theme-dark .assignments-page select,
+html.theme-dark .assignments-page textarea { background: #020617 !important; border-color: #334155 !important; color: #f8fafc !important; }
+
+/* Login is intentionally dark even when the authenticated workspace is light. */
+.login-theme .bg-slate-950 { background-color: #020617 !important; }
+.login-theme .bg-slate-950\/80 { background-color: rgba(2, 6, 23, 0.8) !important; }
+.login-theme .bg-slate-950\/65 { background-color: rgba(2, 6, 23, 0.65) !important; }
+.login-theme .bg-slate-900\/70 { background-color: rgba(15, 23, 42, 0.72) !important; }
+.login-theme .bg-slate-900\/55 { background-color: rgba(15, 23, 42, 0.55) !important; }
+.login-theme .text-white { color: #f8fafc !important; }
+.login-theme .text-slate-100 { color: #f1f5f9 !important; }
+.login-theme .text-slate-200 { color: #e2e8f0 !important; }
+.login-theme .text-slate-300 { color: #cbd5e1 !important; }
+.login-theme .text-slate-400 { color: #94a3b8 !important; }
+.login-theme .text-slate-500 { color: #64748b !important; }
+.login-theme .border-slate-700,
+.login-theme .border-slate-800 { border-color: rgba(71, 85, 105, 0.8) !important; }

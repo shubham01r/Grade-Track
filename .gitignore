@@ -1,0 +1,13 @@
+node_modules/
+.env
+.env.*
+!.env.example
+backend/.env
+backend/node_modules/
+backend/dist/
+backend/generated/
+backend/prisma/migrations/
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+.DS_Store

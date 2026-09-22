@@ -1,0 +1,15 @@
+{
+  "name": "gradetrack-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev:backend": "npm --prefix ./backend run dev",
+    "dev:frontend": "npm --prefix ./frontend run dev",
+    "build:backend": "npm --prefix ./backend run build",
+    "build:frontend": "npm --prefix ./frontend run build",
+    "db:generate": "npm --prefix ./backend run prisma:generate",
+    "db:migrate": "npm --prefix ./backend run prisma:migrate",
+    "db:seed": "npm --prefix ./backend run prisma:seed",
+    "check": "npm --prefix ./backend run build && npm --prefix ./frontend run build"
+  }
+}

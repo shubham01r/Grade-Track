@@ -1,0 +1,179 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum DegreeType {
+  UG
+  PG
+}
+
+enum ScholarshipStatus {
+  SCHOLARSHIP
+  HONOR_ROLL
+  GOOD_STANDING
+  PROBATION
+}
+
+enum SemesterEvaluationStatus {
+  NOT_EVALUATED
+  EVALUATED
+  NEEDS_REEVALUATION
+}
+
+enum SubjectType {
+  THEORY
+  LAB
+  THESIS
+  PRESENTATION
+}
+
+enum ScholarshipRuleStatusCode {
+  SCHOLARSHIP
+  HONOR_ROLL
+  GOOD_STANDING
+  PROBATION
+}
+
+enum SubmissionStatus {
+  SUBMITTED
+  PENDING
+  LATE
+  GRADED
+}
+
+model AdminUser {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  password_hash String
+  created_at    DateTime @default(now())
+
+  @@map("admin_users")
+}
+
+model Student {
+  id                 String             @id @default(uuid())
+  roll_number        String             @unique
+  full_name          String
+  department         String
+  degree_type        DegreeType
+  admission_year     Int
+  cgpa               Decimal?           @db.Decimal(4, 2)
+  scholarship_status ScholarshipStatus? @default(GOOD_STANDING)
+  created_at         DateTime           @default(now())
+  updated_at         DateTime           @updatedAt
+
+  semesters Semester[]
+  submissions Submission[]
+
+  @@index([department, degree_type, admission_year])
+  @@map("students")
+}
+
+model Semester {
+  id                    String                    @id @default(uuid())
+  student_id            String
+  semester_number       Int
+  academic_year         String
+  total_lectures        Int
+  attended_lectures     Int
+  attendance_percentage Decimal?                  @db.Decimal(5, 2)
+  is_debarred           Boolean?                 @default(false)
+  sgpa                  Decimal?                 @db.Decimal(4, 2)
+  evaluation_status     SemesterEvaluationStatus  @default(NOT_EVALUATED)
+  created_at            DateTime                  @default(now())
+  updated_at            DateTime                  @updatedAt
+
+  student  Student  @relation(fields: [student_id], references: [id], onDelete: Cascade)
+  subjects Subject[]
+
+  @@unique([student_id, semester_number])
+  @@map("semesters")
+}
+
+model Subject {
+  id                      String      @id @default(uuid())
+  semester_id             String
+  subject_code            String
+  subject_name            String
+  subject_type            SubjectType
+  credits                 Int
+  theory_max_marks       Int         @default(100)
+  theory_marks_obtained  Int?
+  practical_max_marks    Int?
+  practical_marks_obtained Int?
+  total_marks_obtained   Decimal?     @db.Decimal(5, 2)
+  grade_letter            String?
+  grade_point             Int?
+  is_backlog              Boolean?
+
+  semester Semester @relation(fields: [semester_id], references: [id], onDelete: Cascade)
+
+  @@map("subjects")
+}
+
+model Assignment {
+  id          String       @id @default(uuid())
+  title       String
+  description String?
+  department  String
+  semester    Int
+  dueDate     DateTime
+  maxMarks    Float        @default(100)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  submissions Submission[]
+
+  @@index([department, semester])
+}
+
+model Submission {
+  id             String           @id @default(uuid())
+  assignmentId   String
+  studentId      String
+  status         SubmissionStatus @default(PENDING)
+  submittedAt   DateTime?
+  submissionUrl String?
+  content       String?
+  obtainedMarks Float?
+  feedback      String?
+
+  assignment Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  student    Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([assignmentId, studentId])
+  @@index([studentId])
+}
+
+model GradeScaleRule {
+  id          String @id @default(uuid())
+  marks_min   Int
+  marks_max   Int
+  grade_letter String
+  grade_point Int
+
+  @@map("grade_scale_rules")
+}
+
+model ScholarshipRule {
+  id                  String                    @id @default(uuid())
+  min_cgpa            Decimal                   @db.Decimal(4, 2)
+  max_cgpa            Decimal?                  @db.Decimal(4, 2)
+  label               String
+  status_code         ScholarshipRuleStatusCode
+  requires_no_backlog Boolean                   @default(true)
+
+  @@map("scholarship_rules")
+}
+
+model SystemSettings {
+  id                            String  @id @default(uuid())
+  attendance_threshold_percent Decimal @db.Decimal(5, 2) @default(75.00)
+
+  @@map("system_settings")
+}
