@@ -47,3 +47,86 @@ Grade-Track/
 │   │   └── lib/api.ts          # Central Axios API client
 │   └── package.json
 └── README.md
+
+🚀 Getting Started Locally
+1. Prerequisites
+Node.js: v18.0 or higher
+
+npm or pnpm
+
+A free Supabase PostgreSQL database instance
+
+2. Backend Setup
+# Navigate to backend directory
+cd backend
+
+# Install dependencies
+npm install
+
+# Setup environment variables
+cp .env.example .env
+Add your credentials inside backend/.env:
+
+PORT=4000
+DATABASE_URL="your-supabase-connection-string"
+DIRECT_URL="your-supabase-direct-connection-string"
+JWT_SECRET="your-secure-jwt-secret"
+NODE_ENV="development"
+Push schema and seed database:
+
+# Push Prisma schema to Supabase
+npx prisma db push
+
+# Populate initial admin and academic records
+npm run prisma:seed
+
+# Start backend server
+npm run dev
+Backend runs locally at: http://localhost:4000
+
+3. Frontend Setup
+
+# Open a new terminal and navigate to frontend
+cd frontend
+
+# Install dependencies
+npm install
+
+# Setup environment variables
+cp .env.example .env
+Add your API target inside frontend/.env:
+
+VITE_API_URL="http://localhost:4000/api/v1"
+Start the Vite development server:
+
+npm run dev
+Frontend runs locally at: http://localhost:5173
+
+🔑 Default Admin Credentials
+Email: admin@gradetrack.local
+
+Password: Password123!
+
+🌐 Production Deployment Guide
+Backend (Render / Railway)
+Link your GitHub repository (Grade-Track).
+
+Set Root Directory to backend.
+
+Set Build Command: npm install && npx prisma generate && npm run build
+
+Set Start Command: node dist/server.js (or npm run start)
+
+Configure Environment Variables: DATABASE_URL, DIRECT_URL, JWT_SECRET, NODE_ENV=production.
+
+Frontend (Vercel)
+Import repository and set Root Directory to frontend.
+
+Framework Preset: Vite.
+
+Set Environment Variable: VITE_API_URL to https://<your-backend-service>.onrender.com/api/v1.
+
+Click Deploy.
+
+📜 License
+This project is licensed under the MIT License.
