@@ -1,12 +1,13 @@
-import { PrismaClient, ScholarshipRuleStatusCode, SubjectType, DegreeType, ScholarshipStatus, SemesterEvaluationStatus, SubmissionStatus } from '@prisma/client';
+import { ScholarshipRuleStatusCode, SubjectType, DegreeType, ScholarshipStatus, SemesterEvaluationStatus, SubmissionStatus } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
+import { pathToFileURL } from 'node:url';
+
+import prisma from '../src/lib/prisma.js';
 
 dotenv.config();
 
-const prisma = new PrismaClient();
-
-async function main() {
+export async function seedDatabase() {
   const existingSettings = await prisma.systemSettings.findFirst();
   if (!existingSettings) {
     await prisma.systemSettings.create({
@@ -238,6 +239,40 @@ async function main() {
         { code: 'IT205', name: 'Computer Networks', type: SubjectType.THEORY, credits: 3, theoryMarks: 52, grade: 'C', point: 6 },
       ],
     },
+    {
+      rollNumber: 'GT-2025-107',
+      fullName: 'Meera Kulkarni',
+      department: 'Electronics',
+      degreeType: DegreeType.PG,
+      attendedLectures: 37,
+      totalLectures: 50,
+      sgpa: 6.4,
+      cgpa: 6.4,
+      scholarshipStatus: ScholarshipStatus.GOOD_STANDING,
+      evaluationStatus: SemesterEvaluationStatus.EVALUATED,
+      subjects: [
+        { code: 'EC501', name: 'VLSI Design', type: SubjectType.THEORY, credits: 4, theoryMarks: 64, grade: 'B', point: 7 },
+        { code: 'EC502', name: 'Wireless Communication', type: SubjectType.THEORY, credits: 4, theoryMarks: 58, grade: 'C', point: 6 },
+        { code: 'EC503', name: 'Embedded Systems Lab', type: SubjectType.LAB, credits: 2, theoryMarks: 72, practicalMarks: 75, grade: 'A', point: 8 },
+      ],
+    },
+    {
+      rollNumber: 'GT-2025-108',
+      fullName: 'Nikhil Rao',
+      department: 'Mechanical Engineering',
+      degreeType: DegreeType.UG,
+      attendedLectures: 36,
+      totalLectures: 50,
+      sgpa: 5.25,
+      cgpa: 5.25,
+      scholarshipStatus: ScholarshipStatus.PROBATION,
+      evaluationStatus: SemesterEvaluationStatus.EVALUATED,
+      subjects: [
+        { code: 'ME301', name: 'Thermodynamics', type: SubjectType.THEORY, credits: 4, theoryMarks: 38, grade: 'F', point: 0 },
+        { code: 'ME302', name: 'Fluid Mechanics', type: SubjectType.THEORY, credits: 4, theoryMarks: 46, grade: 'D', point: 5 },
+        { code: 'ME303', name: 'CAD Laboratory', type: SubjectType.LAB, credits: 2, theoryMarks: 61, practicalMarks: 65, grade: 'B', point: 7 },
+      ],
+    },
   ];
 
   for (const persona of demoPersonas) {
@@ -355,12 +390,14 @@ async function main() {
   console.info('Seeded 2 demo assignments with submission tracking records.');
 }
 
-main()
-  .then(async () => {
-    await prisma.$disconnect();
-  })
-  .catch(async (error) => {
-    console.error('Seeding failed:', error);
-    await prisma.$disconnect();
-    process.exit(1);
-  });
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  seedDatabase()
+    .then(async () => {
+      await prisma.$disconnect();
+    })
+    .catch(async (error) => {
+      console.error('Seeding failed:', error);
+      await prisma.$disconnect();
+      process.exit(1);
+    });
+}

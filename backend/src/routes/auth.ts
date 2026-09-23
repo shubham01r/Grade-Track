@@ -40,7 +40,9 @@ router.post('/login', async (req, res, next) => {
       token,
       user: {
         id: admin.id,
+        name: 'GradeTrack Admin',
         email: admin.email,
+        role: 'ADMIN',
       },
     });
   } catch (error) {
