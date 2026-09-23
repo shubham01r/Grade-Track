@@ -20,6 +20,22 @@ export default function LoginPage() {
     setPassword('Password123!');
     toast.success('Demo admin credentials filled.');
   };
+  const handleDirectLogin = () => {
+    // Demo token aur admin user data localStorage me set karo
+    localStorage.setItem('token', 'demo-bypass-token-2026');
+    localStorage.setItem(
+      'user',
+      JSON.stringify({
+        id: 'demo-admin-id',
+        name: 'Admin Evaluator',
+        email: 'admin@gradetrack.local',
+        role: 'ADMIN',
+      })
+    );
+
+    // Seedha dashboard page par redirect kar do
+    window.location.href = '/dashboard';
+  };
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -91,56 +107,62 @@ export default function LoginPage() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label htmlFor="email" className="mb-2 block text-sm font-medium text-slate-300">
-              Email
-            </label>
-            <div className="flex items-center gap-3 rounded-xl border border-slate-700 bg-slate-950/65 px-3 py-3 transition focus-within:border-sky-400/50 focus-within:ring-2 focus-within:ring-sky-500/20">
-              <Mail className="h-4 w-4 text-slate-400" />
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                className="w-full bg-transparent text-sm text-white outline-none placeholder:text-slate-500"
-                placeholder="admin@gradetrack.local"
-                required
-              />
+            <div>
+              <label htmlFor="email" className="mb-2 block text-sm font-medium text-slate-300">
+                Email
+              </label>
+              <div className="flex items-center gap-3 rounded-xl border border-slate-700 bg-slate-950/65 px-3 py-3 transition focus-within:border-sky-400/50 focus-within:ring-2 focus-within:ring-sky-500/20">
+                <Mail className="h-4 w-4 text-slate-400" />
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  className="w-full bg-transparent text-sm text-white outline-none placeholder:text-slate-500"
+                  placeholder="admin@gradetrack.local"
+                  required
+                />
+              </div>
             </div>
-          </div>
 
-          <div>
-            <label htmlFor="password" className="mb-2 block text-sm font-medium text-slate-300">
-              Password
-            </label>
-            <div className="flex items-center gap-3 rounded-xl border border-slate-700 bg-slate-950/65 px-3 py-3 transition focus-within:border-sky-400/50 focus-within:ring-2 focus-within:ring-sky-500/20">
-              <LockKeyhole className="h-4 w-4 text-slate-400" />
-              <input
-                id="password"
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                className="w-full bg-transparent text-sm text-white outline-none placeholder:text-slate-500"
-                placeholder="Enter your password"
-                required
-              />
-              <button type="button" onClick={() => setShowPassword((value) => !value)} className="text-slate-400 transition hover:text-sky-300" aria-label={showPassword ? 'Hide password' : 'Show password'}>
-                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-              </button>
+            <div>
+              <label htmlFor="password" className="mb-2 block text-sm font-medium text-slate-300">
+                Password
+              </label>
+              <div className="flex items-center gap-3 rounded-xl border border-slate-700 bg-slate-950/65 px-3 py-3 transition focus-within:border-sky-400/50 focus-within:ring-2 focus-within:ring-sky-500/20">
+                <LockKeyhole className="h-4 w-4 text-slate-400" />
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  className="w-full bg-transparent text-sm text-white outline-none placeholder:text-slate-500"
+                  placeholder="Enter your password"
+                  required
+                />
+                <button type="button" onClick={() => setShowPassword((value) => !value)} className="text-slate-400 transition hover:text-sky-300" aria-label={showPassword ? 'Hide password' : 'Show password'}>
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
             </div>
-          </div>
 
-          <button type="button" onClick={fillDemoCredentials} className="w-full text-right text-xs font-medium text-sky-300 transition hover:text-sky-200">Auto-fill Demo Admin</button>
-
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-sky-500 to-cyan-400 px-4 py-3 text-sm font-semibold text-slate-950 shadow-[0_0_20px_rgba(56,189,248,0.35)] transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-70"
-          >
-            {isSubmitting ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-slate-950/30 border-t-slate-950" /> : <ArrowRight className="h-4 w-4" />}
-            {isSubmitting ? 'Signing in...' : 'Sign in securely'}
-          </button>
-        </form>
+            <button type="button" onClick={fillDemoCredentials} className="w-full text-right text-xs font-medium text-sky-300 transition hover:text-sky-200">Auto-fill Demo Admin</button>
+            <button
+              type="button"
+              onClick={handleDirectLogin}
+              className="w-full mt-3 py-2.5 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-medium transition text-sm flex items-center justify-center gap-2 cursor-pointer shadow-md"
+            >
+              ⚡ One-Click Direct Access (No Login Needed)
+            </button>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-sky-500 to-cyan-400 px-4 py-3 text-sm font-semibold text-slate-950 shadow-[0_0_20px_rgba(56,189,248,0.35)] transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-70"
+            >
+              {isSubmitting ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-slate-950/30 border-t-slate-950" /> : <ArrowRight className="h-4 w-4" />}
+              {isSubmitting ? 'Signing in...' : 'Sign in securely'}
+            </button>
+          </form>
           <p className="mt-6 text-center text-xs text-slate-500">Protected academic records. Authorized administrators only.</p>
         </motion.section>
       </motion.main>

@@ -5,10 +5,6 @@ import { Link } from 'react-router-dom';
 import apiClient from '../api/client';
 import type { Student } from '../types/student';
 
-function backlogCount(student: Student) {
-  return (student.semesters ?? []).reduce((total, semester) => total + (semester.subjects ?? []).filter((subject) => subject.is_backlog).length, 0);
-}
-
 function rankStyle(rank: number) {
   if (rank === 1) return 'bg-amber-400 text-slate-950';
   if (rank === 2) return 'bg-slate-300 text-slate-950';
@@ -39,7 +35,7 @@ export default function LeaderboardPage() {
   });
 
   const ranked = useMemo(() => {
-    return [...students].sort((a, b) => (Number(b.cgpa ?? 0) - Number(a.cgpa ?? 0)) || (backlogCount(a) - backlogCount(b)) || a.full_name.localeCompare(b.full_name));
+    return [...students].sort((a, b) => (Number(b.cgpa ?? 0) - Number(a.cgpa ?? 0)) || ((a.backlogCount ?? 0) - (b.backlogCount ?? 0)) || a.full_name.localeCompare(b.full_name));
   }, [students]);
 
   const unranked = useMemo(() => {
@@ -61,7 +57,7 @@ export default function LeaderboardPage() {
       {!isLoading && !isError && <>
         <div className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4">
           <div className="mb-4 flex items-center gap-2"><Trophy className="h-5 w-5 text-amber-300" /><h2 className="text-lg font-semibold text-white">Ranked Students</h2></div>
-          {ranked.length === 0 ? <div className="rounded-xl border border-dashed border-slate-700 p-8 text-center text-slate-400">No evaluated students match these filters.</div> : <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/50"><table className="min-w-full text-left text-sm text-slate-200"><thead className="bg-slate-900/80 text-slate-300"><tr><th className="px-4 py-3">Rank</th><th className="px-4 py-3">Name</th><th className="px-4 py-3">Roll No.</th><th className="px-4 py-3">Department</th><th className="px-4 py-3">CGPA</th><th className="px-4 py-3">Backlogs</th></tr></thead><tbody>{ranked.map((student, index) => <tr key={student.id} className="border-t border-slate-800/80 transition hover:bg-slate-900/70"><td className="px-4 py-3"><span className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${rankStyle(index + 1)}`}>{index + 1}</span></td><td className="px-4 py-3 font-medium text-white"><Link to={`/students/${student.id}/report`} className="hover:text-sky-300">{student.full_name}</Link></td><td className="px-4 py-3">{student.roll_number}</td><td className="px-4 py-3">{student.department}</td><td className="px-4 py-3 font-semibold text-sky-200">{student.cgpa}</td><td className="px-4 py-3">{backlogCount(student)}</td></tr>)}</tbody></table></div>}
+          {ranked.length === 0 ? <div className="rounded-xl border border-dashed border-slate-700 p-8 text-center text-slate-400">No evaluated students match these filters.</div> : <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/50"><table className="min-w-full text-left text-sm text-slate-200"><thead className="bg-slate-900/80 text-slate-300"><tr><th className="px-4 py-3">Rank</th><th className="px-4 py-3">Name</th><th className="px-4 py-3">Roll No.</th><th className="px-4 py-3">Department</th><th className="px-4 py-3">CGPA</th><th className="px-4 py-3">Backlogs</th><th className="px-4 py-3">Academic Standing</th></tr></thead><tbody>{ranked.map((student, index) => { const count = student.backlogCount ?? 0; const status = student.academicStatus ?? student.scholarship_status ?? 'GOOD_STANDING'; return <tr key={student.id} className="border-t border-slate-800/80 transition hover:bg-slate-900/70"><td className="px-4 py-3"><span className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${rankStyle(index + 1)}`}>{index + 1}</span></td><td className="px-4 py-3 font-medium text-white"><Link to={`/students/${student.id}/report`} className="hover:text-sky-300">{student.full_name}</Link></td><td className="px-4 py-3 text-slate-300">{student.roll_number}</td><td className="px-4 py-3 text-slate-300">{student.department}</td><td className="px-4 py-3 font-semibold text-sky-200">{student.cgpa}</td><td className="px-4 py-3"><span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${count > 0 ? 'border border-rose-500/40 bg-rose-950/40 text-rose-300' : 'border border-emerald-500/30 bg-emerald-950/40 text-emerald-300'}`}>{count > 0 ? `${count} Backlog(s)` : '0 Backlogs'}</span></td><td className="px-4 py-3"><span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${status === 'PROBATION' ? 'border border-rose-500/40 bg-rose-950/40 text-rose-300' : status === 'SCHOLARSHIP' ? 'border border-amber-500/40 bg-amber-950/40 text-amber-300' : 'border border-cyan-500/30 bg-cyan-950/40 text-cyan-300'}`}>{status === 'PROBATION' && count > 0 ? `PROBATION (${count})` : status}</span></td></tr>; })}</tbody></table></div>}
         </div>
 
         <div className="mt-5 rounded-2xl border border-slate-800 bg-slate-900/60 p-4">

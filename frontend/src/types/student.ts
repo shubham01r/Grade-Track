@@ -7,6 +7,8 @@ export type Student = {
   admission_year: number;
   cgpa: number | null;
   scholarship_status: 'SCHOLARSHIP' | 'HONOR_ROLL' | 'GOOD_STANDING' | 'PROBATION' | null;
+  backlogCount?: number;
+  academicStatus?: 'SCHOLARSHIP' | 'HONOR_ROLL' | 'GOOD_STANDING' | 'PROBATION';
   created_at?: string;
   updated_at?: string;
   semesters?: Semester[];

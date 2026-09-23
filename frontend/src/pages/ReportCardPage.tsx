@@ -56,6 +56,9 @@ export default function ReportCardPage() {
   const { student } = data;
   const semesters = student.semesters ?? [];
   const backlogs = semesters.flatMap((semester) => (semester.subjects ?? []).filter((subject) => subject.is_backlog).map((subject) => ({ semester, subject })));
+  const statusLabel = student.scholarship_status === 'PROBATION' && backlogs.length > 0
+    ? `PROBATION (${backlogs.length} BACKLOGS)`
+    : student.scholarship_status ?? 'GOOD_STANDING';
 
   return (
     <div className="min-h-screen p-8 print:bg-white print:p-0 print:text-slate-900">
@@ -89,7 +92,7 @@ export default function ReportCardPage() {
             </div>
             <div className="text-left sm:text-right">
               <p className="text-xs uppercase tracking-[0.2em] text-slate-400 print:text-slate-500">Report Status</p>
-              <div className="mt-2"><StatusBadge label={student.scholarship_status ?? 'GOOD_STANDING'} tone={statusTone(student.scholarship_status)} /></div>
+              <div className="mt-2"><StatusBadge label={statusLabel} tone={statusTone(student.scholarship_status)} /></div>
             </div>
           </header>
 
@@ -103,7 +106,7 @@ export default function ReportCardPage() {
           <section className="grid gap-4 py-6 sm:grid-cols-3">
             <div className="rounded-xl border border-sky-500/30 bg-sky-500/10 p-4 print:border-slate-300 print:bg-slate-50"><p className="text-xs uppercase tracking-[0.15em] text-slate-400 print:text-slate-500">Final CGPA</p><p className="mt-2 text-4xl font-semibold text-white print:text-slate-900">{student.cgpa ?? '—'}</p></div>
             <div className="rounded-xl border border-slate-700 bg-slate-950/50 p-4 print:border-slate-300 print:bg-white"><p className="text-xs uppercase tracking-[0.15em] text-slate-400 print:text-slate-500">Total Credits</p><p className="mt-2 text-3xl font-semibold text-white print:text-slate-900">{data.report.total_credits}</p></div>
-            <div className="rounded-xl border border-slate-700 bg-slate-950/50 p-4 print:border-slate-300 print:bg-white"><p className="text-xs uppercase tracking-[0.15em] text-slate-400 print:text-slate-500">Backlogs</p><p className="mt-2 text-3xl font-semibold text-white print:text-slate-900">{data.report.active_backlogs}</p></div>
+            <div className="rounded-xl border border-rose-500/30 bg-rose-500/10 p-4 print:border-slate-300 print:bg-white"><p className="text-xs uppercase tracking-[0.15em] text-rose-300 print:text-slate-500">Pending Backlogs</p><p className="mt-2 text-3xl font-semibold text-rose-300 print:text-slate-900">{data.report.active_backlogs}</p></div>
           </section>
 
           <section className="space-y-6">
@@ -116,14 +119,14 @@ export default function ReportCardPage() {
                   <div><h3 className="font-semibold text-white print:text-slate-900">Semester {semester.semester_number} · {semester.academic_year}</h3><p className="text-xs text-slate-400 print:text-slate-600">Attendance: {semester.attendance_percentage ?? 0}%</p></div>
                   <div className="flex items-center gap-3 text-sm"><span className="text-slate-400 print:text-slate-600">SGPA</span><strong className="text-lg text-sky-300 print:text-slate-900">{semester.sgpa ?? '—'}</strong>{semester.is_debarred && <StatusBadge label="Debarred" tone="debarred" />}</div>
                 </div>
-                <div className="overflow-x-auto"><table className="min-w-full text-left text-sm"><thead className="bg-slate-900/60 text-xs uppercase tracking-[0.1em] text-slate-400 print:bg-white print:text-slate-600"><tr><th className="px-4 py-3">Code</th><th className="px-4 py-3">Subject</th><th className="px-4 py-3">Credits</th><th className="px-4 py-3">Marks</th><th className="px-4 py-3">Grade</th><th className="px-4 py-3">Grade Point</th></tr></thead><tbody>{(semester.subjects ?? []).map((subject: Subject) => <tr key={subject.id} className="border-t border-slate-800 print:border-slate-200"><td className="px-4 py-3 text-slate-300 print:text-slate-700">{subject.subject_code}</td><td className="px-4 py-3 font-medium text-white print:text-slate-900">{subject.subject_name}</td><td className="px-4 py-3 text-slate-300 print:text-slate-700">{subject.credits}</td><td className="px-4 py-3 text-slate-300 print:text-slate-700">{subject.total_marks_obtained ?? '—'}</td><td className="px-4 py-3 font-semibold text-white print:text-slate-900">{subject.grade_letter ?? '—'}</td><td className="px-4 py-3 text-slate-300 print:text-slate-700">{subject.grade_point ?? '—'}</td></tr>)}</tbody></table></div>
+                <div className="overflow-x-auto"><table className="min-w-full text-left text-sm"><thead className="bg-slate-900/60 text-xs uppercase tracking-[0.1em] text-slate-400 print:bg-white print:text-slate-600"><tr><th className="px-4 py-3">Code</th><th className="px-4 py-3">Subject</th><th className="px-4 py-3">Credits</th><th className="px-4 py-3">Marks</th><th className="px-4 py-3">Grade</th><th className="px-4 py-3">Grade Point</th></tr></thead><tbody>{(semester.subjects ?? []).map((subject: Subject) => <tr key={subject.id} className={`border-t print:border-slate-200 ${subject.is_backlog ? 'border-rose-500/30 bg-rose-500/10' : 'border-slate-800'}`}><td className="px-4 py-3 text-slate-300 print:text-slate-700">{subject.subject_code}</td><td className="px-4 py-3 font-medium text-white print:text-slate-900">{subject.subject_name}{subject.is_backlog && <span className="ml-2 rounded-full border border-rose-500/40 bg-rose-950/60 px-2 py-0.5 text-[10px] font-semibold text-rose-300 print:border-slate-300 print:bg-white print:text-slate-900">BACKLOG</span>}</td><td className="px-4 py-3 text-slate-300 print:text-slate-700">{subject.credits}</td><td className="px-4 py-3 text-slate-300 print:text-slate-700">{subject.total_marks_obtained ?? '—'}</td><td className={`px-4 py-3 font-semibold ${subject.is_backlog ? 'text-rose-300' : 'text-white'} print:text-slate-900`}>{subject.grade_letter ?? '—'}</td><td className="px-4 py-3 text-slate-300 print:text-slate-700">{subject.grade_point ?? '—'}</td></tr>)}</tbody></table></div>
               </div>
             ))}
           </section>
 
           <section className="mt-8 border-t border-slate-700 pt-6 print:border-slate-300">
             <h2 className="text-lg font-semibold text-white print:text-slate-900">Active Backlog Summary</h2>
-            {backlogs.length === 0 ? <p className="mt-3 text-sm text-emerald-300 print:text-slate-700">No active backlogs recorded.</p> : <div className="mt-3 grid gap-2 sm:grid-cols-2">{backlogs.map(({ semester, subject }) => <div key={subject.id} className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-sm text-amber-200 print:border-slate-300 print:bg-white print:text-slate-900">Semester {semester.semester_number}: {subject.subject_code} · {subject.subject_name}</div>)}</div>}
+            {backlogs.length === 0 ? <p className="mt-3 text-sm text-emerald-300 print:text-slate-700">No active backlogs recorded.</p> : <div className="mt-3 grid gap-2 sm:grid-cols-2">{backlogs.map(({ semester, subject }) => <div key={subject.id} className="rounded-lg border border-rose-500/40 bg-rose-950/60 px-3 py-2 text-sm text-rose-300 print:border-slate-300 print:bg-white print:text-slate-900">Semester {semester.semester_number}: {subject.subject_code} · {subject.subject_name} · BACKLOG</div>)}</div>}
           </section>
         </article>
       </div>

@@ -219,6 +219,25 @@ async function main() {
         { code: 'PG504', name: 'Thesis and Project', type: SubjectType.THESIS, credits: 6, theoryMarks: 90, grade: 'O', point: 10 },
       ],
     },
+    {
+      rollNumber: 'GT-2025-106',
+      fullName: 'Aryan Deshmukh',
+      department: 'Information Technology',
+      degreeType: DegreeType.UG,
+      attendedLectures: 41,
+      totalLectures: 50,
+      sgpa: 4.57,
+      cgpa: 4.57,
+      scholarshipStatus: ScholarshipStatus.PROBATION,
+      evaluationStatus: SemesterEvaluationStatus.EVALUATED,
+      subjects: [
+        { code: 'IT201', name: 'Data Structures & Algorithms', type: SubjectType.THEORY, credits: 2, theoryMarks: 28, grade: 'F', point: 0 },
+        { code: 'IT202', name: 'Discrete Mathematics', type: SubjectType.THEORY, credits: 2, theoryMarks: 32, grade: 'F', point: 0 },
+        { code: 'IT203', name: 'Digital Logic Design', type: SubjectType.THEORY, credits: 3, theoryMarks: 58, grade: 'C', point: 6 },
+        { code: 'IT204', name: 'Object Oriented Programming', type: SubjectType.THEORY, credits: 4, theoryMarks: 62, grade: 'B', point: 7 },
+        { code: 'IT205', name: 'Computer Networks', type: SubjectType.THEORY, credits: 3, theoryMarks: 52, grade: 'C', point: 6 },
+      ],
+    },
   ];
 
   for (const persona of demoPersonas) {

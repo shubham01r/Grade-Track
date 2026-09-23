@@ -53,6 +53,10 @@ export default function StudentProfilePage() {
   const activeSemester = useMemo(() => {
     return semesters.find((semester) => semester.evaluation_status !== 'NOT_EVALUATED') ?? semesters[0] ?? null;
   }, [semesters]);
+  const activeBacklogs = (activeSemester?.subjects ?? []).filter((subject) => subject.is_backlog).length;
+  const statusLabel = student?.scholarship_status === 'PROBATION' && activeBacklogs > 0
+    ? `PROBATION (${activeBacklogs} BACKLOGS)`
+    : student?.scholarship_status ?? 'GOOD_STANDING';
 
   const handleSemesterSaved = (semester: Semester) => {
     queryClient.setQueryData(['student', id], (current: any) => {
@@ -221,7 +225,7 @@ export default function StudentProfilePage() {
                   <p className="text-sm text-slate-400">{student.department ?? 'Department unavailable'} • {student.degree_type ?? 'Degree unavailable'}</p>
                 </div>
               </div>
-              <StatusBadge label={student.scholarship_status ?? 'GOOD_STANDING'} tone={student.scholarship_status === 'SCHOLARSHIP' ? 'scholarship' : student.scholarship_status === 'PROBATION' ? 'backlog' : 'good'} />
+              <StatusBadge label={statusLabel} tone={student.scholarship_status === 'SCHOLARSHIP' ? 'scholarship' : student.scholarship_status === 'PROBATION' ? 'backlog' : 'good'} />
             </div>
 
             <div className="grid gap-4 md:grid-cols-3">
@@ -231,7 +235,7 @@ export default function StudentProfilePage() {
               </div>
               <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Scholarship</p>
-                <p className="mt-3 text-lg font-medium text-sky-200">{student.scholarship_status ?? 'Good Standing'}</p>
+                <p className="mt-3 text-lg font-medium text-sky-200">{statusLabel}</p>
               </div>
               <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Admission</p>
@@ -357,10 +361,10 @@ export default function StudentProfilePage() {
                             </div>
                           ) : (
                             (semester.subjects ?? []).map((subject: Subject) => (
-                              <div key={subject.id} className="rounded-xl border border-slate-800 bg-slate-900/50 p-3">
+                              <div key={subject.id} className={`rounded-xl border p-3 ${subject.is_backlog ? 'border-rose-500/40 bg-rose-500/10' : 'border-slate-800 bg-slate-900/50'}`}>
                                 <div className="mb-2 flex items-center justify-between gap-3">
                                   <p className="font-medium text-white">{subject.subject_name}</p>
-                                  <div className="flex items-center gap-2"><span className="rounded-full border border-slate-700 bg-slate-950/60 px-2 py-0.5 text-[10px] uppercase tracking-[0.1em] text-slate-300">{subject.subject_type}</span><button type="button" onClick={() => setSubjectToEdit(subject)} aria-label={`Edit ${subject.subject_name}`} className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 p-1.5 text-cyan-300 transition hover:bg-cyan-500/20"><Pencil className="h-3.5 w-3.5" /></button><button type="button" onClick={() => setSubjectToDelete(subject)} aria-label={`Remove ${subject.subject_name}`} className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-1.5 text-rose-300 transition hover:bg-rose-500/20"><Trash2 className="h-3.5 w-3.5" /></button></div>
+                                  <div className="flex items-center gap-2"><span className={`rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-[0.1em] ${subject.is_backlog ? 'border-rose-500/40 bg-rose-950/60 text-rose-300' : 'border-slate-700 bg-slate-950/60 text-slate-300'}`}>{subject.is_backlog ? 'BACKLOG' : subject.subject_type}</span><button type="button" onClick={() => setSubjectToEdit(subject)} aria-label={`Edit ${subject.subject_name}`} className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 p-1.5 text-cyan-300 transition hover:bg-cyan-500/20"><Pencil className="h-3.5 w-3.5" /></button><button type="button" onClick={() => setSubjectToDelete(subject)} aria-label={`Remove ${subject.subject_name}`} className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-1.5 text-rose-300 transition hover:bg-rose-500/20"><Trash2 className="h-3.5 w-3.5" /></button></div>
                                 </div>
                                 <div className="flex items-center justify-between text-xs text-slate-400">
                                   <span>{subject.subject_code}</span>
@@ -373,7 +377,7 @@ export default function StudentProfilePage() {
                                   </div>
                                   <div className="rounded-lg border border-slate-800 bg-slate-950/60 p-2">
                                     <p className="text-slate-400">Grade</p>
-                                    <p className="mt-1 font-medium text-white">{subject.grade_letter ?? '—'}</p>
+                                    <p className={`mt-1 font-medium ${subject.is_backlog ? 'text-rose-300' : 'text-white'}`}>{subject.grade_letter ?? '—'}</p>
                                   </div>
                                 </div>
                               </div>
@@ -480,7 +484,7 @@ export default function StudentProfilePage() {
                   <span>Backlog Status</span>
                   <GraduationCap className="h-4 w-4 text-amber-300" />
                 </div>
-                <p className="mt-3 text-lg font-medium text-white">{(activeSemester?.subjects ?? []).some((item: Subject) => item.is_backlog) ? 'Active backlog' : 'Clear'}</p>
+                <p className="mt-3 text-lg font-medium text-white">{activeBacklogs > 0 ? `Pending Backlogs: ${activeBacklogs}` : 'Clear'}</p>
               </div>
             </div>
           </div>
