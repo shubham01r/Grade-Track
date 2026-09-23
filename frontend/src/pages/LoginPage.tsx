@@ -13,7 +13,7 @@ export default function LoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { login } = useAuth();
+  const { login, enterDemoMode } = useAuth();
 
   const fillDemoCredentials = () => {
     setEmail('admin@gradetrack.local');
@@ -21,20 +21,9 @@ export default function LoginPage() {
     toast.success('Demo admin credentials filled.');
   };
   const handleDirectLogin = () => {
-    // Demo token aur admin user data localStorage me set karo
-    localStorage.setItem('token', 'demo-bypass-token-2026');
-    localStorage.setItem(
-      'user',
-      JSON.stringify({
-        id: 'demo-admin-id',
-        name: 'Admin Evaluator',
-        email: 'admin@gradetrack.local',
-        role: 'ADMIN',
-      })
-    );
-
-    // Seedha dashboard page par redirect kar do
-    window.location.href = '/dashboard';
+    enterDemoMode();
+    navigate('/dashboard', { replace: true });
+    toast.success('Demo workspace ready.');
   };
 
   const handleSubmit = async (event: FormEvent) => {
