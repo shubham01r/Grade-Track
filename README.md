@@ -6,7 +6,7 @@ A production-ready, full-stack institutional academic management system engineer
 
 ## 🔗 Live Deployments
 
-- 🌐 **Live Web Application (Frontend)**: [https://grade-track.vercel.app](https://grade-track.vercel.app) *(Update with your Vercel URL)*
+- 🌐 **Live Web Application (Frontend)**: [https://grade-track-nine.vercel.app](https://grade-track-nine.vercel.app/)) *(Update with your Vercel URL)*
 - ⚙️ **Production API (Backend)**: [https://grade-track.onrender.com/api/v1](https://grade-track.onrender.com/api/v1)
 - 🩺 **API Health Check**: [https://grade-track.onrender.com/health](https://grade-track.onrender.com/health)
 
